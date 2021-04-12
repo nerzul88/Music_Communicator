@@ -1,0 +1,17 @@
+{% if user.is_authenticated %} 
+<div class="row">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link {% if index %}active{% endif %}" href="/">Все авторы</a>
+        </li>
+        {% for group in groups %}
+        <li class="nav-item">
+            <a class="nav-link {% if slug and slug == group.slug %}active{% endif %}" href="{% url 'group_posts' group.slug %}">{{ group.title }}</a>
+        </li>
+        {% endfor %}
+        <li class="nav-item">
+            <a class="nav-link {% if follow %}active{% endif %}" href="/follow">Избранные авторы</a>
+        </li>
+    </ul>
+</div>
+{% endif %}

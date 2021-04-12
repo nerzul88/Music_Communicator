@@ -1,0 +1,45 @@
+<div class="card mb-3 mt-1 shadow-sm">
+    {% load thumbnail %}
+    {% thumbnail post.image "900x600" crop="center" as im %}
+        <img class="card-img"  src="{{ im.url }}" />
+    {% endthumbnail %}
+    <div class="card-body">
+            <p class="card-text">
+                    <a name="post_{{ post.id }}" href="{% url 'profile' post.author.username %}">
+                        <strong class="d-block text-gray-dark">@{{ post.author }}</strong>
+                    </a>
+                    {{ post.text|linebreaksbr }}
+            </p>
+            {% if post.group %}
+            <a class="card-link muted" href="{% url 'group_posts' post.group.slug %}">
+                    <strong class="d-block text-gray-dark">#{{ post.group.title }}</strong>
+            </a>
+            {% endif %}
+            {% if post.audio %}
+                <figure>
+                    <audio src="{{MEDIA_URL}}{{ post.audio.url }}" preload="auto" controls="true"></audio>
+                    <figcaption>{{ post.audio_title }}</figcaption>
+                </figure>
+            {% endif %}
+            <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group ">
+                        <a class="btn btn-sm text-muted" href="{% url 'post' post.author.username post.id %}" role="button">
+                                {% if post.comments.exists %}
+                                {{ post.comments.count }} комментариев
+                                {% else %}
+                                Добавить комментарий
+                                {% endif %}
+                             </a>
+                             {% if user == post.author %}
+                             <a class="btn btn-sm text-muted" href="{% url 'post_edit' post.author.username post.id %}"
+                                    role="button">
+                                    Редактировать
+                            </a>
+                            <a class="btn btn-sm text-muted" href="{% url 'delete' post.id %}" role="button">Удалить</>
+                            {% endif %}
+
+                    </div>
+                    <small class="text-muted">{{ post.pub_date }}</small>
+            </div>
+    </div>
+</div>
